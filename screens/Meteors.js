@@ -1,0 +1,52 @@
+import React, { Component } from 'react';
+import { Text, View,Alert } from 'react-native';
+
+export default class MeteorScreen extends Component {
+     constructor(props) {
+        super(props);
+        this.state = {
+            meteors: {},
+        };
+    }
+
+    componentDidMount() {
+        this.getMeteors()
+    }
+
+    getMeteors = () => {
+        axios
+            .get("https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=DEMO_KEY")
+            .then(response => {
+                this.setState({ meteors: response.data.near_earth_ojects })
+            })
+            .catch(error => {
+                Alert.alert(error.message)
+            })
+    }
+
+  render() {
+    if (Object.keys(this.state.meteors).length === 0) {
+            return (
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                    <Text>Loading</Text>
+                </View>
+            )
+        } else {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                <Text>Meteor Screen!</Text>
+            </View>
+        )
+    }
+}
+}
